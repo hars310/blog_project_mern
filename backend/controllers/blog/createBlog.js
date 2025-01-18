@@ -1,16 +1,18 @@
 const Blog = require('../../models/Blog');
 const User = require('../../models/User');
-const jwt = require('jsonwebtoken'); 
+const jwt = require('jsonwebtoken');
 
 // Example of how to create a new blog post
 const createBlogPost = async (req, res) => {
   const { title, content, tags, images } = req.body;
 
   // Authenticate the user using JWT token
-  const token = req.headers.authorization?.split(' ')[1];  // Assuming token is passed in the "Authorization" header
+  const token = req.headers.authorization?.split(' ')[1]; // Assuming token is passed in the "Authorization" header
   // console.log(token)
   if (!token) {
-    return res.status(403).json({ message: 'No token provided. Please log in.' });
+    return res
+      .status(403)
+      .json({ message: 'No token provided. Please log in.' });
   }
 
   try {
@@ -29,8 +31,8 @@ const createBlogPost = async (req, res) => {
       title,
       content,
       tags,
-      images,  // Now multiple images are allowed
-      author: userId,  // Automatically set the author
+      images, // Now multiple images are allowed
+      author: userId, // Automatically set the author
     });
 
     await newBlogPost.save();
@@ -39,6 +41,7 @@ const createBlogPost = async (req, res) => {
       message: 'Blog post created successfully!',
       blogPost: newBlogPost,
     });
+    console.log("Blog post created successfully!")
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

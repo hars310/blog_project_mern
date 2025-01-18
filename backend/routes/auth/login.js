@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../../models/User');
 
-
 // User Login Route
 const LoginUser = async (req, res) => {
   const { email, password } = req.body;
