@@ -13,7 +13,7 @@ const deleteBlog = async (req, res) => {
     res.status(200).json({
       message: 'Blog post deleted successfully!',
     });
-    console.log("Blog post deleted successfully!","blog id: " ,req.params.id)
+    console.log('Blog post deleted successfully!', 'blog id: ', req.params.id);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

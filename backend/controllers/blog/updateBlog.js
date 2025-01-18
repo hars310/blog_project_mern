@@ -20,7 +20,7 @@ const updateBlog = async (req, res) => {
       message: 'Blog post updated successfully!',
       blogPost: updatedBlog,
     });
-    console.log("Blog post updated successfully!")
+    console.log('Blog post updated successfully!');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

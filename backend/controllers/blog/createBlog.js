@@ -25,23 +25,28 @@ const createBlogPost = async (req, res) => {
     if (!user) {
       return res.status(400).json({ message: 'User not found.' });
     }
+    if (user.role === 'reader') {
+      return res
+        .status(202)
+        .json('you have not the permission to create a post');
+    } else {
+      // Create a new blog post with the authenticated user's ID
+      const newBlogPost = new Blog({
+        title,
+        content,
+        tags,
+        images, // Now multiple images are allowed
+        author: userId, // Automatically set the author
+      });
 
-    // Create a new blog post with the authenticated user's ID
-    const newBlogPost = new Blog({
-      title,
-      content,
-      tags,
-      images, // Now multiple images are allowed
-      author: userId, // Automatically set the author
-    });
+      await newBlogPost.save();
 
-    await newBlogPost.save();
-
-    res.status(201).json({
-      message: 'Blog post created successfully!',
-      blogPost: newBlogPost,
-    });
-    console.log("Blog post created successfully!")
+      res.status(201).json({
+        message: 'Blog post created successfully!',
+        blogPost: newBlogPost,
+      });
+      console.log('Blog post created successfully!');
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

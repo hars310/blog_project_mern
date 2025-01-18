@@ -15,7 +15,7 @@ const getAllBlogs = async (req, res) => {
       message: 'Blogs fetched successfully!',
       blogs,
     });
-    console.log("Blogs fetched successfully!")
+    console.log('Blogs fetched successfully!');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });
