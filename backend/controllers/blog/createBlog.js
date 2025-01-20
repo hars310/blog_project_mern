@@ -6,47 +6,23 @@ const jwt = require('jsonwebtoken');
 const createBlogPost = async (req, res) => {
   const { title, content, tags, images } = req.body;
 
-  // Authenticate the user using JWT token
-  const token = req.headers.authorization?.split(' ')[1]; // Assuming token is passed in the "Authorization" header
-  // console.log(token)
-  if (!token) {
-    return res
-      .status(403)
-      .json({ message: 'No token provided. Please log in.' });
-  }
-
   try {
-    // Verify the token and extract user ID
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const userId = decoded.id;
+    // Create a new blog post with the authenticated user's ID
+    const newBlogPost = new Blog({
+      title,
+      content,
+      tags,
+      images, // Now multiple images are allowed
+      author: userId, // Automatically set the author
+    });
 
-    // Find the user (optional, but ensures the user exists in the system)
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(400).json({ message: 'User not found.' });
-    }
-    if (user.role === 'reader') {
-      return res
-        .status(202)
-        .json('you have not the permission to create a post');
-    } else {
-      // Create a new blog post with the authenticated user's ID
-      const newBlogPost = new Blog({
-        title,
-        content,
-        tags,
-        images, // Now multiple images are allowed
-        author: userId, // Automatically set the author
-      });
+    await newBlogPost.save();
 
-      await newBlogPost.save();
-
-      res.status(201).json({
-        message: 'Blog post created successfully!',
-        blogPost: newBlogPost,
-      });
-      console.log('Blog post created successfully!');
-    }
+    res.status(201).json({
+      message: 'Blog post created successfully!',
+      blogPost: newBlogPost,
+    });
+    console.log('Blog post created successfully!');
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

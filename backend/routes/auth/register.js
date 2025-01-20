@@ -47,6 +47,7 @@ const RegisterUser = async (req, res) => {
       message: 'User registered successfully!',
       user: { name: user.name, email: user.email, role: user.role },
     });
+    console.log('User registered successfully!');
   } catch (error) {
     console.error(error.message);
     res.status(500).json({ message: 'Server error. Please try again later.' });
