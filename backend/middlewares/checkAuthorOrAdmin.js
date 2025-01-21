@@ -23,9 +23,11 @@ const checkAuthorOrAdmin = async (req, res, next) => {
     if (!user) {
       return res.status(400).json({ message: 'User not found.' });
     }
-    if(user.role === 'reader'){
-      return res.status(202).json({message:"You are reader, you can't create posts"})
-      console.log("You are reader, you can't create posts")
+    if (user.role === 'reader') {
+      return res
+        .status(202)
+        .json({ message: "You are reader, you can't create posts" });
+      console.log("You are reader, you can't create posts");
     }
 
     // Extract blog ID from request params (for update/delete routes)

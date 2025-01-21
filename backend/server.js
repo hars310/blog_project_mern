@@ -4,10 +4,11 @@ const connectDB = require('./db/dbConnect'); // Import MongoDB connection
 const RegisterUser = require('./routes/auth/register');
 const LoginUser = require('./routes/auth/login');
 const blogRoutes = require('./routes/blogs/blogRoutes');
-const profilePicture = require('./routes/upload/profilePicture')
+const profilePicture = require('./routes/upload/profilePicture');
+const UserDetails = require('./routes/auth/user');
 require('dotenv').config(); // Load environment variables
 const app = express();
-const port = process.env.PORT; // Default to 3000 if no port in .env
+const port = process.env.PORT || 3000; // Default to 3000 if no port in .env
 
 // Establish MongoDB connection
 connectDB();
@@ -23,8 +24,8 @@ app.get('/', (req, res) => {
 
 app.post('/register', RegisterUser);
 app.post('/login', LoginUser);
-app.use('/upload',profilePicture)
-
+app.use('/upload', profilePicture);
+app.use('/user', UserDetails);
 app.use('/blog', blogRoutes);
 
 // Start the server

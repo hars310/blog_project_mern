@@ -44,7 +44,7 @@ router.post('/profile', upload.single('file'), async (req, res) => {
       ACL: process.env.AWS_S3_ACL || 'private',
     });
 
-    await s3Client.send(uploadCommand);    
+    await s3Client.send(uploadCommand);
 
     return res.status(200).json({ newName });
   } catch (error) {
