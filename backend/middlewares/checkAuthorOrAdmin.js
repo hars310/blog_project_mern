@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const Blog = require('../models/Blog');
+
 
 // Middleware to check if the user is the author or admin
 const checkAuthorOrAdmin = async (req, res, next) => {
@@ -32,23 +32,7 @@ const checkAuthorOrAdmin = async (req, res, next) => {
       console.log("You are reader, you can't create posts");
     }
 
-    // Extract blog ID from request params (for update/delete routes)
-    // const blogId = req.params.id;
-    // console.log("here 2",blogId)
-    // // Find the blog post by ID
-    // const blog = await Blog.findById(blogId);
-    // // console.log("here 3",blog)
-    // if (!blog) {
-    //   return res.status(404).json({ message: 'Blog post not found.' });
-    // }
-
-    // // Check if the logged-in user is the author or an admin
-    // if (blog.author.toString() !== userId && user.role !== 'admin') {
-    //   return res
-    //     .status(403)
-    //     .json({ message: 'You are not authorized to perform this action.' });
-    // }
-
+    
     // Attach the user object to the request for further use
     req.user = user;
     // req.blog = blog;
@@ -60,4 +44,7 @@ const checkAuthorOrAdmin = async (req, res, next) => {
   }
 };
 
-module.exports = checkAuthorOrAdmin;
+
+
+
+module.exports = {checkAuthorOrAdmin};

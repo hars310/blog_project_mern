@@ -61,7 +61,8 @@ const Dashboard = () => {
       await axios.delete(`http://localhost:4000/blog/${blogId}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setBlogs(blogs.filter((blog) => blog.id !== blogId));
+      setBlogs(blogs.filter((blog) => blog._id !== blogId)); // Use _id if your backend uses it
+
     } catch (err) {
       console.error("Error deleting blog:", err);
     }
@@ -111,22 +112,22 @@ const Dashboard = () => {
               <div className="space-y-4">
                 {blogs.map((blog, index) => (
                   <div
-                    key={blog.id || index}
+                    key={blog._id || index}
                     className="p-4 border border-gray-300 rounded shadow-sm flex justify-between items-center"
                   >
                     <div>
                       <h4 className="font-bold">{blog.title}</h4>
-                      <p className="text-gray-600">{blog.excerpt}</p>
+                      <p className="text-gray-600">Created at: {blog.createdAt.substr(0,10)}</p>
                     </div>
                     <div className="space-x-2">
                       <button
-                        onClick={() => handleEditBlog(blog.id)}
+                        onClick={() => handleEditBlog(blog._id)}
                         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
                       >
                         Edit
                       </button>
                       <button
-                        onClick={() => handleDeleteBlog(blog.id)}
+                        onClick={() => handleDeleteBlog(blog._id)}
                         className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                       >
                         Delete

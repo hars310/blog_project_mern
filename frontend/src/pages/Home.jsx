@@ -127,6 +127,7 @@ const Home = () => {
                 >
                   <h2 className="text-xl font-bold">{blog.title}</h2>
                   <p>{blog.content.substring(0, 100)}...</p>
+                  <img src={`${import.meta.env.VITE_AWS_S3_URL}/${blog.images[0]}`} className="w-48" alt="" />
                 </li>
               ))}
             </ul>
