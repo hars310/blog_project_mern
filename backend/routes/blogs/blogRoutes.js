@@ -8,7 +8,7 @@ const checkAuthorOrAdmin = require('../../middlewares/checkAuthorOrAdmin'); // C
 const router = express.Router();
 
 router.post('/create', checkAuthorOrAdmin, createBlogPost);
-router.get('/all-blogs', checkAuthorOrAdmin, getAllBlogs);
+router.get('/all-blogs', getAllBlogs);
 router.put('/:id', checkAuthorOrAdmin, updateBlog);
 router.delete('/:id', checkAuthorOrAdmin, deleteBlog);
 

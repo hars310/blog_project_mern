@@ -21,7 +21,7 @@ const RegisterPage = () => {
 
       // Send FormData to the server
       const response = await axios.post(
-        "http://localhost:4000/upload/profile",
+        `http://localhost:4000/upload/profile`,
         formData,
         {
           headers: {
@@ -73,7 +73,7 @@ const RegisterPage = () => {
       };
 
       const response = await axios.post(
-        "http://localhost:4000/register",
+        `http://localhost:4000/register`,
         userData,
       );
 

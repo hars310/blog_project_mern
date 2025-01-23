@@ -23,7 +23,7 @@ const Login = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/login", {
+      const response = await axios.post(`http://localhost:4000/login`, {
         email,
         password,
       });
@@ -34,7 +34,7 @@ const Login = () => {
       Cookies.set("token", token, { expires: 1 }); // 1-day expiration
 
       // Redirect to dashboard or home page
-      navigate("/dashboard");
+      navigate("/");
 
       console.log("Login successful:");
     } catch (error) {
