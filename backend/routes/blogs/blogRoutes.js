@@ -4,6 +4,7 @@ const getAllBlogs = require('../../controllers/blog/getAllBlogs');
 const updateBlog = require('../../controllers/blog/updateBlog');
 const deleteBlog = require('../../controllers/blog/deleteBlog');
 const checkAuthorOrAdmin = require('../../middlewares/checkAuthorOrAdmin'); // Correct the import
+const getUserBlogs = require('../../controllers/blog/userBlogs');
 
 const router = express.Router();
 
@@ -11,5 +12,5 @@ router.post('/create', checkAuthorOrAdmin, createBlogPost);
 router.get('/all-blogs', getAllBlogs);
 router.put('/:id', checkAuthorOrAdmin, updateBlog);
 router.delete('/:id', checkAuthorOrAdmin, deleteBlog);
-
+router.get('/user-blogs', checkAuthorOrAdmin, getUserBlogs); // Add
 module.exports = router;

@@ -5,6 +5,7 @@ const RegisterUser = require('./routes/auth/register');
 const LoginUser = require('./routes/auth/login');
 const blogRoutes = require('./routes/blogs/blogRoutes');
 const profilePicture = require('./routes/upload/profilePicture');
+const blogImages = require('./routes/upload/blogImages');
 const UserDetails = require('./routes/auth/user');
 require('dotenv').config(); // Load environment variables
 const app = express();
@@ -25,6 +26,7 @@ app.get('/', (req, res) => {
 app.post('/register', RegisterUser);
 app.post('/login', LoginUser);
 app.use('/upload', profilePicture);
+app.use('/upload', blogImages);
 app.use('/user', UserDetails);
 app.use('/blog', blogRoutes);
 

@@ -6,26 +6,41 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
+  const [blogs, setBlogs] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const token = Cookies.get("token");
-        // console.log(token)
         if (!token) {
           navigate("/login");
           return;
         }
 
-        const response = await axios.get(`http://localhost:4000/user/profile`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        // Fetch user profile
+        const userResponse = await axios.get(
+          `http://localhost:4000/user/profile`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        );
 
-        setUser(response.data.user);
-        // console.log(response.data.user)
+        setUser(userResponse.data.user);
+
+        // Fetch only the user's blogs if the role is "author"
+        if (userResponse.data.user.role === "author") {
+          const blogsResponse = await axios.get(
+            `http://localhost:4000/blog/user-blogs`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+            },
+          );
+          setBlogs(blogsResponse.data.blogs);
+          // console.log(blogsResponse.data.blogs)
+        }
       } catch (err) {
-        setError("Failed to load user data. Please log in again.");
+        setError("Failed to load data. Please log in again.");
         console.error(err);
         Cookies.remove("token");
         navigate("/login");
@@ -40,24 +55,43 @@ const Dashboard = () => {
     navigate("/login");
   };
 
+  const handleDeleteBlog = async (blogId) => {
+    try {
+      const token = Cookies.get("token");
+      await axios.delete(`http://localhost:4000/blog/${blogId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBlogs(blogs.filter((blog) => blog.id !== blogId));
+    } catch (err) {
+      console.error("Error deleting blog:", err);
+    }
+  };
+
+  const handleAddBlog = () => {
+    navigate("/create-blog");
+  };
+
+  const handleEditBlog = (blogId) => {
+    navigate(`/edit-blog/${blogId}`);
+  };
+
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100">
       {error ? (
         <div className="text-red-600 text-center">{error}</div>
       ) : user ? (
-        <div className="w-full max-w-lg bg-white p-8 rounded shadow-md">
+        <div className="w-full max-w-3xl bg-white p-8 rounded shadow-md">
           <div className="flex flex-row justify-between">
             <div className="w-2/3">
-              <h2 className="text-2xl font-bold ">
+              <h2 className="text-2xl font-bold">
                 Welcome, {user.name.split(" ")[0]}!
               </h2>
-              <p className="text-gray-700 ">@{user.username}</p>
-              <p className="text-gray-700 ">Bio: {user.bio}</p>
-              <p className="text-gray-700 ">Email: {user.email}</p>
+              <p className="text-gray-700">@{user.username}</p>
+              <p className="text-gray-700">Bio: {user.bio}</p>
+              <p className="text-gray-700">Email: {user.email}</p>
               <p className="text-gray-700 mb-4">
                 DOB: {user.dateOfBirth.substr(0, 10)}
               </p>
-
               <p className="text-gray-700 mb-4">Role: {user.role}</p>
             </div>
             <div className="w-1/3 flex justify-center">
@@ -71,8 +105,46 @@ const Dashboard = () => {
             </div>
           </div>
 
+          {blogs.length > 0 && user.role === "author" && (
+            <div>
+              <h3 className="text-xl font-bold mt-6 mb-4">Your Blogs</h3>
+              <div className="space-y-4">
+                {blogs.map((blog, index) => (
+                  <div
+                    key={blog.id || index}
+                    className="p-4 border border-gray-300 rounded shadow-sm flex justify-between items-center"
+                  >
+                    <div>
+                      <h4 className="font-bold">{blog.title}</h4>
+                      <p className="text-gray-600">{blog.excerpt}</p>
+                    </div>
+                    <div className="space-x-2">
+                      <button
+                        onClick={() => handleEditBlog(blog.id)}
+                        className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                      >
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => handleDeleteBlog(blog.id)}
+                        className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
           <button
-            className="w-full py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
+            onClick={handleAddBlog}
+            className="mt-4 w-full py-2 px-4 bg-green-500 text-white rounded hover:bg-green-600"
+          >
+            Add New Blog
+          </button>
+          <button
+            className="w-full mt-8 py-2 px-4 bg-red-500 text-white rounded hover:bg-red-600"
             onClick={handleLogout}
           >
             Logout

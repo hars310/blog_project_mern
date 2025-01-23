@@ -4,8 +4,9 @@ const jwt = require('jsonwebtoken');
 
 // Example of how to create a new blog post
 const createBlogPost = async (req, res) => {
+  const userId = req.user.id;
   const { title, content, tags, images } = req.body;
-
+  console.log(title, content, tags, images, userId);
   try {
     // Create a new blog post with the authenticated user's ID
     const newBlogPost = new Blog({
@@ -15,7 +16,7 @@ const createBlogPost = async (req, res) => {
       images, // Now multiple images are allowed
       author: userId, // Automatically set the author
     });
-
+    // console.log(newBlogPost)
     await newBlogPost.save();
 
     res.status(201).json({
