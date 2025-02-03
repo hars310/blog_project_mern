@@ -2,3 +2,4 @@ backend/.env
 backend/node_modules
 project.txt
 backend/middlewares/blogDetails.js
+access_allowed.png
